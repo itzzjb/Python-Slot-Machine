@@ -32,16 +32,17 @@ def get_slot_machine_spin(rows, cols, symbols):
     all_symbols = []
 
     for symbol, count in symbols.items():
-        # We can use a anonymous variable "_" here
+        # We can use an anonymous variable "_" here
         # We use it when we don't need the value of the variable
-        # Used when you want to loop through something but you don't care about the interation value
+        # Used when you want to loop through something, but you don't care about the interation value
         for _ in range(count):
             all_symbols.append(symbol)
 
     # This is a nested list
     # Normally in nested list the inner list is the row and the outer list is the column
     # But in this case, the inner list is the column and the outer list is the columns
-    columns = [[], [], []]
+
+    columns = []
 
     # Generating columns for every single column we have ...
     for _ in range(cols):
@@ -64,6 +65,41 @@ def get_slot_machine_spin(rows, cols, symbols):
         columns.append(column)
 
     return columns
+
+
+# We need to define a function to print the slot machine values in the console
+# columns = [ [A, B, C], [D, A, B], [C, D, A] ]
+# [ A, B, C ]
+# [ D, A, B ]
+# [ C, D, A ]
+
+# There are the 3 different columns in the slot machine
+# The actual rows will be like
+# A D C
+# B A D
+# C B A
+
+# This operation is called transposing a matrix
+def print_slot_machine(columns):
+    # len(columns) will give the number of symbols per column in the slot machine
+    for row in range(len(columns[0])):
+        # This way you can iterate through the values in a list and get the values
+        # for column in columns:
+        # We can add enumerate() function to get the index and the value of the list
+        for i, column in enumerate(columns):
+            # We need to check if we are at the last column
+            # So we can avoid adding the "|" at the end of the row
+            # end -> Tells the print() function what to print at the end of the string
+            # by default it is "\n" which is a new line
+            # because of this when we use print() it will print the next print() in the next line
+            # We can chane the end value to "" of other value to print in same line.
+            if i == len(columns) - 1:
+                print(column[row], end="")
+            else:
+                print(column[row], end=" | ")
+        # We can have a empty print() to add a new line
+        # This is same as print(end="\n")
+        print()
 
 
 # We can start from getting the data from the user
@@ -128,8 +164,13 @@ def get_bet():
 # We can put the program in a main function so if we end our program, we can call this again to rerun the program
 # Then when the user wants to play again, we can call this function again
 def main():
+    # This will get the deposit from the user
     balance = deposit()
-    lines = get_number_of_lines()
+
+    # This will get the deposit from the user
+    lines = get_number_of_lines()  # This will get the deposit from the user
+
+    # This will get the bet per line from the user
     while True:
         bet = get_bet()
         total_bet = bet * lines
@@ -141,5 +182,10 @@ def main():
             print("Total bet is", total_bet)
     print(f"You are betting ${bet} on {lines} lines. Total bet is equal to ${bet * lines}")
 
+    # We can use the get_slot_machine_spin() function to get the slot machine values
+    slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
+    print_slot_machine(slots)
+
 
 main()
+
