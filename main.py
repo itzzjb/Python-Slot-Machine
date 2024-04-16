@@ -193,12 +193,10 @@ def get_bet():
     return bet
 
 
-# We can put the program in a main function so if we end our program, we can call this again to rerun the program
-# Then when the user wants to play again, we can call this function again
-def main():
-    # This will get the deposit from the user
-    balance = deposit()
-
+# We can have a function to represent the game as a whole because game must be playable multiple times
+# We can call it a spin
+# balance is not included here
+def spin(balance):
     # This will get the deposit from the user
     lines = get_number_of_lines()  # This will get the deposit from the user
 
@@ -226,5 +224,32 @@ def main():
     # This is call the spat/unpack operator
     print("You won on lines: ", *winning_lines)
 
+    # We need to get a return value to identify how much they win or lose per game
+    return winnings - total_bet
 
+
+# We can put the program in a main function so if we end our program, we can call this again to rerun the program
+# Then when the user wants to play again, we can call this function again
+def main():
+    # This will get the deposit from the user
+    balance = deposit()
+
+    # We can write a while loop to keep the game running
+    while True:
+        print()
+        print(f"Your current balance is ${balance}")
+        # We don't need to assign a variable to get the input because we don't care about the input
+        answer = input("Press enter to play (q to quit).")
+        if answer == "q":
+            break
+
+        # We are passing the previous balance and calling the spin function...
+        # ...while getting the new balance from adding the win of loss from this spin
+        # This happens after the execution of the current spin
+        balance += spin(balance)
+
+    print(f"Your final balance is ${balance}")
+
+
+# Calling the main function to run the program
 main()
