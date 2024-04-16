@@ -25,6 +25,38 @@ symbol_count = {
     "D": 8  # Every single reel we have 8 D's
 }
 
+# We can create another dictionary to store the multiplier values for the symbols
+symbol_value = {
+    # symbol: value
+    "A": 5,  # A is worth 5 multiplier points
+    "B": 4,  # B is worth 4 multiplier points
+    "C": 3,  # C is worth 3 multiplier points
+    "D": 2  # D is worth 2 multiplier points
+}
+
+
+# Now we need a function to check the winning
+def check_winning(columns, lines, bet, values):
+    # We use this variable to store the total winnings
+    winnings = 0
+    # We use this list to get the values of winning lines
+    winning_lines = []
+    for line in range(lines):
+        symbol = columns[0][line]
+        for column in columns:
+            symbol_to_check = column[line]
+            if symbol_to_check != symbol:
+                break
+        # We can have an else statement for a for loop as well
+        # It will only run if the for loop completes without a break
+        else:
+            winnings += values[symbol] * bet
+            # We need to add a 1 because line is an index
+            winning_lines.append(line + 1)
+
+    # We can return two values like this
+    return winnings, winning_lines
+
 
 # Now we need to generate outcome of the slot machine using the symbols and the number of each symbols
 def get_slot_machine_spin(rows, cols, symbols):
@@ -186,6 +218,13 @@ def main():
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
     print_slot_machine(slots)
 
+    # We can use the check_winning() function to check the winnings and winning lines
+    # We can retrieve multiple values from a function by using multiple variables like this
+    winnings, winning_lines = check_winning(slots, lines, bet, symbol_value)
+    print(f"You won $ {winnings}")
+    # We can use * to unpack the list and print the values in the list
+    # This is call the spat/unpack operator
+    print("You won on lines: ", *winning_lines)
+
 
 main()
-
