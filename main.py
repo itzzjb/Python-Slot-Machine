@@ -1,3 +1,7 @@
+# We can import modules for python files
+# We need to import the random module to generate random slot machine values
+import random
+
 # We can use constants to store the values that we will use in the program that will not be changed
 # Constants are written in all capital letters
 # This will also give the ability for us to change the values in the machines...
@@ -5,6 +9,61 @@
 MAX_LINES = 3
 MAX_BET = 100
 MIN_BET = 1
+
+# Defining the number of rows and columns in the slot machine
+ROWS = 3
+COLS = 3
+
+# Python dictionaries are used to store data values in key:value pairs
+# We can use a dictionary to store the symbols and the number of each symbols in the slot machine
+# We use curly braces to define a dictionary
+symbol_count = {
+    # symbol: count
+    "A": 2,  # Every single reel we have 2 A's
+    "B": 4,  # Every single reel we have 4 B's
+    "C": 6,  # Every single reel we have 6 C's
+    "D": 8  # Every single reel we have 8 D's
+}
+
+
+# Now we need to generate outcome of the slot machine using the symbols and the number of each symbols
+def get_slot_machine_spin(rows, cols, symbols):
+    # Getting all the values in the dictionary to a list
+    all_symbols = []
+
+    for symbol, count in symbols.items():
+        # We can use a anonymous variable "_" here
+        # We use it when we don't need the value of the variable
+        # Used when you want to loop through something but you don't care about the interation value
+        for _ in range(count):
+            all_symbols.append(symbol)
+
+    # This is a nested list
+    # Normally in nested list the inner list is the row and the outer list is the column
+    # But in this case, the inner list is the column and the outer list is the columns
+    columns = [[], [], []]
+
+    # Generating columns for every single column we have ...
+    for _ in range(cols):
+        column = []
+
+        # We need to add : inbetween the square brackets.
+        # This is called the slicing operator
+        # This will create a new list with the same values as the original list
+        # This is done to avoid changing the original list
+        # Without the slicing operator, the original list will be changed when we change the new list
+        current_symbols = all_symbols[:]
+        for _ in range(rows):
+            # We can use random.choice() to get a random value from a list
+            value = random.choice(current_symbols)
+            # We need to remove the value we chose from the current_symbols list
+            # Finds the first instance of the value same as the value in the list and removes it
+            current_symbols.remove(value)
+            column.append(value)
+
+        columns.append(column)
+
+    return columns
 
 
 # We can start from getting the data from the user
@@ -26,7 +85,6 @@ def deposit():
                 print("Amount must be greater than 0")
         else:
             print("Please enter a number")
-
     return amount
 
 
@@ -72,7 +130,15 @@ def get_bet():
 def main():
     balance = deposit()
     lines = get_number_of_lines()
-    bet = get_bet()
+    while True:
+        bet = get_bet()
+        total_bet = bet * lines
+        if total_bet <= balance:
+            break
+        else:
+            print("You don't have enough balance to bet on", lines, "lines with", bet, "on each line")
+            print("Your balance is", balance)
+            print("Total bet is", total_bet)
     print(f"You are betting ${bet} on {lines} lines. Total bet is equal to ${bet * lines}")
 
 
